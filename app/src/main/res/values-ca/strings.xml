@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<bool name="default_locale">false</bool>
+	<string name="msg_copied">Text copiat al Porta-retalls</string>
+	<string name="msg_permission_request">Concedeix permisos:</string>
+</resources>

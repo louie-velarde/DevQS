@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<bool name="default_locale">false</bool>
+	<string name="msg_copied">Text byl zkopírován do schránky</string>
+	<string name="msg_permission_request">Udělte prosím oprávnění:</string>
+</resources>

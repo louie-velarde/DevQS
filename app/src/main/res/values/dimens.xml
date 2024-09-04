@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<dimen name="bg_command_corner_radius">8dp</dimen>
+	<dimen name="bg_command_padding">8dp</dimen>
+	<dimen name="bg_command_stroke_width">2dp</dimen>
+</resources>

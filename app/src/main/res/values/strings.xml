@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="app_name" translatable="false">DevQS</string>
+
+	<string name="label_developer_options" translatable="false">DEV</string>
+	<string name="label_adb" translatable="false">ADB</string>
+
+	<string name="msg_copied">Text copied to clipboard</string>
+	<string name="msg_permission_request">Please grant permissions:</string>
+
+	<bool name="default_locale">true</bool>
+</resources>

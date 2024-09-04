@@ -1,0 +1,24 @@
+# Auto Generated Files
+caches/
+libraries/
+modules/
+shelf/
+.name
+appInsightsSettings.xml
+compiler.xml
+gradle.xml
+jarRepositories.xml
+kotlinc.xml
+misc.xml
+modules.xml
+other.xml
+
+# User-Specific Stuff
+copyright/profiles_settings.xml
+dictionaries/*
+assetWizardSettings.xml
+deploymentTargetDropDown.xml
+deploymentTargetSelector.xml
+migrations.xml
+vcs.xml
+workspace.xml

@@ -1,0 +1,26 @@
+# Android Studio
+.externalNativeBuild/
+captures/
+
+# IntelliJ
+*.iws
+out/
+
+# Gradle
+.gradle/
+build/
+
+# Local Configuration
+local.properties
+
+# Auto Generated Files
+*.iml
+
+# OS-Specific Files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db

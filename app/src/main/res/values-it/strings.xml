@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<bool name="default_locale">false</bool>
+	<string name="msg_copied">Testo copiato negli appunti</string>
+	<string name="msg_permission_request">Concedi le autorizzazioni:</string>
+</resources>

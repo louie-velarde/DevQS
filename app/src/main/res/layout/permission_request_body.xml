@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	android:orientation="vertical"
+	android:padding="?android:dialogPreferredPadding">
+	<TextView
+		style="@android:style/TextAppearance.Material.Subhead"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:text="@string/msg_permission_request" />
+	<HorizontalScrollView
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_marginTop="8dp"
+		android:background="@drawable/bg_command"
+		android:fadeScrollbars="false"
+		android:layoutDirection="ltr"
+		android:scrollbarStyle="insideInset"
+		android:scrollbarThumbHorizontal="?android:colorAccent">
+		<TextView
+			android:id="@+id/command"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:fontFamily="monospace"
+			android:paddingBottom="@dimen/bg_command_padding"
+			android:textColor="?android:textColorPrimary"
+			android:typeface="monospace"
+			tools:text="@tools:sample/lorem/random" />
+	</HorizontalScrollView>
+</LinearLayout>
