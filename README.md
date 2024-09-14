@@ -2,6 +2,11 @@
 
 Quick Settings tiles for developers
 
+[<img src="https://f-droid.org/badge/get-it-on.png"
+    alt="Get it on F-Droid"
+    height="80">](https://f-droid.org/packages/me.velc.devqs)
+
+
 Tired of banking and other financial apps whining that Developer Options is on? With *DevQS*,
 Developer Options can be toggled off then back on from the Quick Settings panel without resetting
 other settings. Long-clicking on any of the tiles will also open the Developer Options settings
