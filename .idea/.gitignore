@@ -1,24 +1,33 @@
-# Auto Generated Files
-caches/
-libraries/
-modules/
-shelf/
-.name
-appInsightsSettings.xml
-compiler.xml
-gradle.xml
-jarRepositories.xml
-kotlinc.xml
-misc.xml
-modules.xml
-other.xml
+# Gradle files
+.gradle/
+build/
 
-# User-Specific Stuff
-copyright/profiles_settings.xml
-dictionaries/*
-assetWizardSettings.xml
+# Local configuration file (sdk path, etc)
+local.properties
+
+# Log/OS Files
+*.log
+
+# Android Studio generated files and folders
+captures/
+.externalNativeBuild/
+.cxx/
+*.apk
+output.json
+
+# IntelliJ
+*.iml
+.idea/
+misc.xml
 deploymentTargetDropDown.xml
-deploymentTargetSelector.xml
-migrations.xml
-vcs.xml
-workspace.xml
+render.experimental.xml
+
+# Keystore files
+*.jks
+*.keystore
+
+# Google Services (e.g. APIs or Firebase)
+google-services.json
+
+# Android Profiling Alicia Prince 
+*.hprof
