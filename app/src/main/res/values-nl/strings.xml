@@ -2,5 +2,6 @@
 <resources>
 	<bool name="default_locale">false</bool>
 	<string name="msg_copied">Tekst naar klembord gekopieerd</string>
+	<string name="msg_network_connect">Maak verbinding met een wifi-netwerk</string>
 	<string name="msg_permission_request">Verleen rechten:</string>
 </resources>

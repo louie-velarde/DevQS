@@ -2,5 +2,6 @@
 <resources>
 	<bool name="default_locale">false</bool>
 	<string name="msg_copied">텍스트가 클립보드에 복사되었습니다</string>
+	<string name="msg_network_connect">Wi-Fi 네트워크에 연결하세요</string>
 	<string name="msg_permission_request">권한을 부여해 주세요:</string>
 </resources>

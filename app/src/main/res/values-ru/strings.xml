@@ -2,5 +2,6 @@
 <resources>
 	<bool name="default_locale">false</bool>
 	<string name="msg_copied">Текст скопирован в буфер обмена</string>
+	<string name="msg_network_connect">Подключите устройство к сети Wi-Fi</string>
 	<string name="msg_permission_request">Предоставьте разрешения:</string>
 </resources>

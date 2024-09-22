@@ -4,7 +4,10 @@ import android.Manifest;
 import android.app.AlertDialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.pm.PackageManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkCapabilities;
 import android.provider.Settings;
 import android.service.quicksettings.Tile;
 import android.service.quicksettings.TileService;
@@ -22,11 +25,11 @@ public abstract class BaseDevQsTileService extends TileService {
 		this.settingName = settingName;
 	}
 
-	private boolean isActive() {
+	protected boolean isActive() {
 		return "1".equals(Settings.Global.getString(getContentResolver(), settingName));
 	}
 
-	private boolean hasPermission() {
+	protected boolean hasPermission() {
 		int result = checkSelfPermission(Manifest.permission.WRITE_SECURE_SETTINGS);
 		return result == PackageManager.PERMISSION_GRANTED;
 	}
@@ -34,7 +37,7 @@ public abstract class BaseDevQsTileService extends TileService {
 	@Override
 	public void onStartListening() {
 		var tile = getQsTile();
-		if (isLocked() && !hasPermission()) {
+		if (isLocked()) {
 			tile.setState(Tile.STATE_UNAVAILABLE);
 		} else if (isActive()) {
 			tile.setState(Tile.STATE_ACTIVE);
@@ -61,7 +64,7 @@ public abstract class BaseDevQsTileService extends TileService {
 		}
 	}
 
-	private void showPermissionRequestDialog() {
+	protected void showPermissionRequestDialog() {
 		var command = String.format(
 				Locale.ROOT,
 				"adb shell pm grant %s %s",
@@ -95,10 +98,45 @@ public abstract class BaseDevQsTileService extends TileService {
 		}
 	}
 
-	public static class Adb extends BaseDevQsTileService {
+	public static class UsbDebugging extends BaseDevQsTileService {
 
-		public Adb() {
+		public UsbDebugging() {
 			super(Settings.Global.ADB_ENABLED);
+		}
+	}
+
+	public static class WirelessDebugging extends BaseDevQsTileService {
+
+		public WirelessDebugging() {
+			super("adb_wifi_enabled");
+		}
+
+		@Override
+		public void onClick() {
+			if (hasPermission() && !isActive() && !isWifiConnected(this)) {
+				var dialog = new AlertDialog.Builder(this)
+						.setTitle(R.string.app_name)
+						.setMessage(R.string.msg_network_connect)
+						.setPositiveButton(android.R.string.ok, null);
+				showDialog(dialog.create());
+			} else {
+				super.onClick();
+			}
+		}
+
+		private static boolean isWifiConnected(Context context) {
+			var cm = context.getSystemService(ConnectivityManager.class);
+			if (cm == null) return false;
+
+			for (var network : cm.getAllNetworks()) {
+				var nc = cm.getNetworkCapabilities(network);
+				if (nc == null) continue;
+
+				if (nc.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
+					return true;
+				}
+			}
+			return false;
 		}
 	}
 }

@@ -2,5 +2,6 @@
 <resources>
 	<bool name="default_locale">false</bool>
 	<string name="msg_copied">تم نسخ النص إلى الحافظة</string>
+	<string name="msg_network_connect">‏يُرجى الاتصال بشبكة Wi-Fi</string>
 	<string name="msg_permission_request">يُرجى منح الأذونات.:</string>
 </resources>

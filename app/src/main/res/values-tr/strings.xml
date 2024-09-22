@@ -2,5 +2,6 @@
 <resources>
 	<bool name="default_locale">false</bool>
 	<string name="msg_copied">Metin panoya kopyalandı</string>
+	<string name="msg_network_connect">Lütfen Kablosuz bir ağa bağlanın</string>
 	<string name="msg_permission_request">Lütfen izinleri verin:</string>
 </resources>

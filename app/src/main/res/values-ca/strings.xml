@@ -2,5 +2,6 @@
 <resources>
 	<bool name="default_locale">false</bool>
 	<string name="msg_copied">Text copiat al Porta-retalls</string>
+	<string name="msg_network_connect">Connecta\'t a una xarxa Wi‑Fi</string>
 	<string name="msg_permission_request">Concedeix permisos:</string>
 </resources>

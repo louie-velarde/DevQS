@@ -2,5 +2,6 @@
 <resources>
 	<bool name="default_locale">false</bool>
 	<string name="msg_copied">Tekst został skopiowany do schowka</string>
+	<string name="msg_network_connect">Połącz się z siecią Wi-Fi</string>
 	<string name="msg_permission_request">Przyznaj uprawnienia:</string>
 </resources>

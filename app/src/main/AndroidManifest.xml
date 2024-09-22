@@ -4,6 +4,9 @@
 	xmlns:tools="http://schemas.android.com/tools">
 
 	<uses-permission
+		android:name="android.permission.ACCESS_NETWORK_STATE"
+		android:minSdkVersion="30" />
+	<uses-permission
 		android:name="android.permission.WRITE_SECURE_SETTINGS"
 		tools:ignore="ProtectedPermissions" />
 
@@ -28,10 +31,25 @@
 		</service>
 
 		<service
-			android:name=".BaseDevQsTileService$Adb"
+			android:name=".BaseDevQsTileService$UsbDebugging"
 			android:exported="true"
-			android:icon="@drawable/ic_adb"
-			android:label="@string/label_adb"
+			android:icon="@drawable/ic_usb_debugging"
+			android:label="@string/label_usb_debugging"
+			android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
+			<intent-filter>
+				<action android:name="android.service.quicksettings.action.QS_TILE" />
+			</intent-filter>
+			<meta-data
+				android:name="android.service.quicksettings.TOGGLEABLE_TILE"
+				android:value="true" />
+		</service>
+
+		<service
+			android:name=".BaseDevQsTileService$WirelessDebugging"
+			android:enabled="@bool/wireless_adb_available"
+			android:exported="true"
+			android:icon="@drawable/ic_wireless_debugging"
+			android:label="@string/label_wireless_debugging"
 			android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
 			<intent-filter>
 				<action android:name="android.service.quicksettings.action.QS_TILE" />
@@ -44,6 +62,7 @@
 		<activity
 			android:name=".TrampolineActivity"
 			android:exported="true"
+			android:permission="android.permission.BIND_QUICK_SETTINGS_TILE"
 			android:theme="@android:style/Theme.Translucent">
 			<intent-filter>
 				<action android:name="android.service.quicksettings.action.QS_TILE_PREFERENCES" />

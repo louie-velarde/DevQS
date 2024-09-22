@@ -2,5 +2,6 @@
 <resources>
 	<bool name="default_locale">false</bool>
 	<string name="msg_copied">A szöveg bemásolva a vágólapra</string>
+	<string name="msg_network_connect">Csatlakozzon Wi-Fi-hálózathoz</string>
 	<string name="msg_permission_request">Adja meg az engedélyeket:</string>
 </resources>

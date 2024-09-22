@@ -3,9 +3,11 @@
 	<string name="app_name" translatable="false">DevQS</string>
 
 	<string name="label_developer_options" translatable="false">DEV</string>
-	<string name="label_adb" translatable="false">ADB</string>
+	<string name="label_usb_debugging" translatable="false">ADB</string>
+	<string name="label_wireless_debugging" translatable="false">ADB \uD83D\uDCF6</string>
 
 	<string name="msg_copied">Text copied to clipboard</string>
+	<string name="msg_network_connect">Please connect to a Wi\u2011Fi network</string>
 	<string name="msg_permission_request">Please grant permissions:</string>
 
 	<bool name="default_locale">true</bool>

@@ -2,5 +2,6 @@
 <resources>
 	<bool name="default_locale">false</bool>
 	<string name="msg_copied">文字已複製到剪貼簿</string>
+	<string name="msg_network_connect" msgid="2365795244718494658">請連上 Wi-Fi 網路</string>
 	<string name="msg_permission_request">請授予權限：</string>
 </resources>

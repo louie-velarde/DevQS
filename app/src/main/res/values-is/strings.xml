@@ -2,5 +2,6 @@
 <resources>
 	<bool name="default_locale">false</bool>
 	<string name="msg_copied">Texti afritaður á klippiborð</string>
+	<string name="msg_network_connect">Tengstu Wi-Fi neti</string>
 	<string name="msg_permission_request">Veittu heimildir:</string>
 </resources>

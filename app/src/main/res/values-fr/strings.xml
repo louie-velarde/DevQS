@@ -2,5 +2,6 @@
 <resources>
 	<bool name="default_locale">false</bool>
 	<string name="msg_copied">Le texte a été copié dans le presse-papiers</string>
+	<string name="msg_network_connect">Connectez-vous à un réseau Wi-Fi</string>
 	<string name="msg_permission_request">Veuillez accorder les autorisations:</string>
 </resources>

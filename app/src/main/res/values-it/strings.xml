@@ -2,5 +2,6 @@
 <resources>
 	<bool name="default_locale">false</bool>
 	<string name="msg_copied">Testo copiato negli appunti</string>
+	<string name="msg_network_connect">Collegati a una rete Wi-Fi</string>
 	<string name="msg_permission_request">Concedi le autorizzazioni:</string>
 </resources>

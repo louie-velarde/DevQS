@@ -2,5 +2,6 @@
 <resources>
 	<bool name="default_locale">false</bool>
 	<string name="msg_copied">テキストをクリップボードにコピーしました</string>
+	<string name="msg_network_connect">Wi-Fi ネットワークに接続してください</string>
 	<string name="msg_permission_request">権限を付与してください:</string>
 </resources>

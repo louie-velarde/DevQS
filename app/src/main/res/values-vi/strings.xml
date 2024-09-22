@@ -2,5 +2,6 @@
 <resources>
 	<bool name="default_locale">false</bool>
 	<string name="msg_copied">Đã sao chép văn bản vào bảng nhớ tạm thời</string>
+	<string name="msg_network_connect">Hãy kết nối mạng Wi-Fi</string>
 	<string name="msg_permission_request">Vui lòng cấp quyền:</string>
 </resources>

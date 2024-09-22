@@ -2,5 +2,6 @@
 <resources>
 	<bool name="default_locale">false</bool>
 	<string name="msg_copied">文本已复制到剪贴板</string>
+	<string name="msg_network_connect">请连接到 WLAN 网络</string>
 	<string name="msg_permission_request">请授予权限：</string>
 </resources>

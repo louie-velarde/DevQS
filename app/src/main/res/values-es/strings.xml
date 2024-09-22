@@ -2,5 +2,6 @@
 <resources>
 	<bool name="default_locale">false</bool>
 	<string name="msg_copied">Texto copiado en el portapapeles</string>
+	<string name="msg_network_connect">Conéctate a una red Wi-Fi</string>
 	<string name="msg_permission_request">Concede permisos:</string>
 </resources>

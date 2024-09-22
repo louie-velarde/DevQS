@@ -2,5 +2,6 @@
 <resources>
 	<bool name="default_locale">false</bool>
 	<string name="msg_copied">Text in Zwischenablage kopiert</string>
+	<string name="msg_network_connect">Bitte stell eine WLAN-Verbindung her</string>
 	<string name="msg_permission_request">Erteile Berechtigungen:</string>
 </resources>

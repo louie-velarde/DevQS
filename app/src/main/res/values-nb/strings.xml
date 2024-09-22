@@ -2,5 +2,6 @@
 <resources>
 	<bool name="default_locale">false</bool>
 	<string name="msg_copied">Kopierte tekst til utklippstavlen</string>
+	<string name="msg_network_connect">Koble til et wifi-nettverk</string>
 	<string name="msg_permission_request">Gi tillatelser:</string>
 </resources>
