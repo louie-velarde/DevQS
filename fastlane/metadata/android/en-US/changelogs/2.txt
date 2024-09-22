@@ -1,0 +1,1 @@
+- Add Wireless Debugging Quick Settings tile for Android 11 and higher devices
