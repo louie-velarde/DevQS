@@ -12,8 +12,6 @@ import android.net.NetworkCapabilities;
 import android.net.Uri;
 import android.net.nsd.NsdManager;
 import android.net.nsd.NsdServiceInfo;
-import android.os.Handler;
-import android.os.Looper;
 import android.provider.Settings;
 import android.service.quicksettings.Tile;
 import android.service.quicksettings.TileService;
@@ -35,7 +33,7 @@ public abstract class BaseDevQsTileService extends TileService {
 		this.settingName = settingName;
 	}
 
-	protected boolean isActive() {
+	protected boolean isSettingEnabled() {
 		return "1".equals(Settings.Global.getString(getContentResolver(), settingName));
 	}
 
@@ -44,54 +42,60 @@ public abstract class BaseDevQsTileService extends TileService {
 		return result == PackageManager.PERMISSION_GRANTED;
 	}
 
-	private final Handler handler = new Handler(Looper.getMainLooper());
-	private final ContentObserver observer = new ContentObserver(handler) {
+	private final ContentObserver observer = new ContentObserver(null) {
 		@Override
 		public void onChange(boolean selfChange, Uri uri) {
-			updateTile();
+			var tile = getQsTile();
+			int state = isLocked()
+					? Tile.STATE_UNAVAILABLE
+					: isSettingEnabled()
+							? Tile.STATE_ACTIVE
+							: Tile.STATE_INACTIVE;
+			onUpdateTile(tile, tile.getLabel(), state);
 		}
 	};
 
 	@Override
 	public void onStartListening() {
-		updateTile();
+		var uri = Settings.Global.getUriFor(settingName);
+		observer.onChange(true, uri);
 
-		getContentResolver().registerContentObserver(
-				Settings.Global.getUriFor(settingName),
-				false,
-				observer);
-	}
-
-	protected void updateTile() {
-		var tile = getQsTile();
-		if (isLocked()) {
-			tile.setState(Tile.STATE_UNAVAILABLE);
-		} else if (isActive()) {
-			tile.setState(Tile.STATE_ACTIVE);
-		} else {
-			tile.setState(Tile.STATE_INACTIVE);
-		}
-		tile.updateTile();
+		getContentResolver().registerContentObserver(uri, false, observer);
 	}
 
 	@Override
 	public void onClick() {
 		if (hasPermission()) {
 			var tile = getQsTile();
-			if (isActive()) {
+			if (tile.getState() == Tile.STATE_ACTIVE) {
 				Settings.Global.putString(getContentResolver(), settingName, "0");
-				tile.setState(Tile.STATE_INACTIVE);
-			} else {
+				onUpdateTile(tile, tile.getLabel(), Tile.STATE_INACTIVE);
+			} else if (canEnableSetting()) {
 				Settings.Global.putString(getContentResolver(), settingName, "1");
-				tile.setState(Tile.STATE_ACTIVE);
+				onUpdateTile(tile, tile.getLabel(), Tile.STATE_ACTIVE);
+			} else {
+				showCannotEnableSettingReason();
 			}
-			tile.updateTile();
 		} else {
 			showPermissionRequestDialog();
 		}
 	}
 
-	protected void showPermissionRequestDialog() {
+	protected void onUpdateTile(Tile tile, CharSequence label, int state) {
+		if (!tile.getLabel().equals(label) || tile.getState() != state) {
+			tile.setLabel(label);
+			tile.setState(state);
+			tile.updateTile();
+		}
+	}
+
+	protected boolean canEnableSetting() {
+		return true;
+	}
+
+	protected void showCannotEnableSettingReason() {}
+
+	private void showPermissionRequestDialog() {
 		var command = String.format(
 				Locale.ROOT,
 				"adb shell pm grant %s %s",
@@ -154,37 +158,6 @@ public abstract class BaseDevQsTileService extends TileService {
 		}
 
 		@Override
-		public void onClick() {
-			if (hasPermission() && !isActive() && !isWifiConnected(this)) {
-				var dialog = new AlertDialog.Builder(this)
-						.setTitle(R.string.app_name)
-						.setMessage(R.string.msg_network_connect)
-						.setPositiveButton(android.R.string.ok, null);
-				showDialog(dialog.create());
-			} else {
-				super.onClick();
-				if (!isActive()) {
-					var tile = getQsTile();
-					tile.setLabel(getText(R.string.label_wireless_debugging));
-					tile.updateTile();
-				}
-			}
-		}
-
-		@Override
-		public void onStopListening() {
-			try {
-				var nsdm = getSystemService(NsdManager.class);
-				if (nsdm != null) {
-					nsdm.stopServiceDiscovery(this);
-				}
-			} catch (IllegalArgumentException ignored) {
-			}
-
-			super.onStopListening();
-		}
-
-		@Override
 		public void onDiscoveryStarted(String serviceType) {
 			log("onDiscoveryStarted(%s)", serviceType);
 		}
@@ -196,8 +169,8 @@ public abstract class BaseDevQsTileService extends TileService {
 
 		@Override
 		public void onServiceFound(NsdServiceInfo serviceInfo) {
+			if (!isSettingEnabled()) return;
 			log("onServiceFound(%s)", serviceInfo);
-			if (!isActive()) return;
 
 			var nsdm = getSystemService(NsdManager.class);
 			nsdm.resolveService(serviceInfo, new NsdManager.ResolveListener() {
@@ -214,6 +187,7 @@ public abstract class BaseDevQsTileService extends TileService {
 		}
 
 		void onServiceResolved(NsdServiceInfo serviceInfo) {
+			if (!isSettingEnabled()) return;
 			log("onServiceResolved(%s)", serviceInfo);
 
 			var serviceAddr = serviceInfo.getHost().getHostAddress();
@@ -225,11 +199,9 @@ public abstract class BaseDevQsTileService extends TileService {
 			log("IPv4 Address: %s", ipv4Addr);
 
 			if (Objects.equals(serviceAddr, ipv4Addr)) {
-				var info = String.format(Locale.ROOT, "%s : %d", serviceAddr, servicePort);
-
-				var tile = getQsTile();
-				tile.setLabel(info);
-				tile.updateTile();
+				var label = String.format(Locale.ROOT, "%s : %d", serviceAddr, servicePort);
+				int state = isLocked() ? Tile.STATE_UNAVAILABLE : Tile.STATE_ACTIVE;
+				onUpdateTile(getQsTile(), label, state);
 			}
 		}
 
@@ -250,6 +222,38 @@ public abstract class BaseDevQsTileService extends TileService {
 		@Override
 		public void onStopDiscoveryFailed(String serviceType, int errorCode) {
 			log("onStopDiscoveryFailed(%s, %d)", serviceType, errorCode);
+		}
+
+		@Override
+		protected void onUpdateTile(Tile tile, CharSequence label, int state) {
+			var newLabel = isSettingEnabled() ? label : getText(R.string.label_wireless_debugging);
+			super.onUpdateTile(tile, newLabel, state);
+		}
+
+		@Override
+		protected boolean canEnableSetting() {
+			return isWifiConnected(this);
+		}
+
+		@Override
+		protected void showCannotEnableSettingReason() {
+			var dialog = new AlertDialog.Builder(this)
+					.setTitle(R.string.app_name)
+					.setMessage(R.string.msg_network_connect)
+					.setPositiveButton(android.R.string.ok, null);
+			showDialog(dialog.create());
+		}
+
+		@Override
+		public void onStopListening() {
+			try {
+				var nsdm = getSystemService(NsdManager.class);
+				if (nsdm != null) {
+					nsdm.stopServiceDiscovery(this);
+				}
+			} catch (IllegalArgumentException ignored) {
+			}
+			super.onStopListening();
 		}
 
 		private static String getIpv4Address(Context context) {
