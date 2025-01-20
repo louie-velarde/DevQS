@@ -4,6 +4,7 @@ libraries/
 modules/
 shelf/
 .name
+AndroidProjectSystem.xml
 appInsightsSettings.xml
 compiler.xml
 gradle.xml
@@ -20,5 +21,6 @@ assetWizardSettings.xml
 deploymentTargetDropDown.xml
 deploymentTargetSelector.xml
 migrations.xml
+runConfigurations.xml
 vcs.xml
 workspace.xml
