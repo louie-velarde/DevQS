@@ -4,7 +4,7 @@ Quick Settings tiles for developers
 
 [<img src="https://f-droid.org/badge/get-it-on.png"
     alt="Get it on F-Droid"
-    height="80">](https://f-droid.org/packages/me.velc.devqs)
+    width=25% />](https://f-droid.org/packages/me.velc.devqs)
 
 
 Tired of banking and other financial apps whining that Developer Options is on? With *DevQS*,
