@@ -20,6 +20,7 @@ dictionaries/*
 assetWizardSettings.xml
 deploymentTargetDropDown.xml
 deploymentTargetSelector.xml
+deviceManager.xml
 migrations.xml
 runConfigurations.xml
 vcs.xml
