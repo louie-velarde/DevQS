@@ -16,7 +16,8 @@ other.xml
 
 # User-Specific Stuff
 copyright/profiles_settings.xml
-dictionaries/*
+dictionaries/
+runConfigurations/
 assetWizardSettings.xml
 deploymentTargetDropDown.xml
 deploymentTargetSelector.xml

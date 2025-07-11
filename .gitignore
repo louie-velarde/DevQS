@@ -9,6 +9,7 @@ out/
 # Gradle
 .gradle/
 build/
+gradle/gradle-daemon-jvm.properties
 
 # Local Configuration
 local.properties
