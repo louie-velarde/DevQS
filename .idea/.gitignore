@@ -10,6 +10,7 @@ compiler.xml
 gradle.xml
 jarRepositories.xml
 kotlinc.xml
+markdown.xml
 misc.xml
 modules.xml
 other.xml
