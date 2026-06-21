@@ -3,3 +3,5 @@ Tired of banking and other financial apps whining that Developer Options is on? 
 IMPORTANT:
 There is no launcher icon nor activity. The tiles must be manually added to the Quick Settings panel. The app requires the permission WRITE_SECURE_SETTINGS which can be granted using ADB.
 <blockquote><tt>adb shell pm grant me.velc.devqs android.permission.WRITE_SECURE_SETTINGS</tt></blockquote>
+
+Or alternatively, as of 1.2.0, if <a href="https://github.com/RikkaApps/Sui">Sui</a> is installed, allow access to grant the permission.

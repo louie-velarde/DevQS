@@ -1,0 +1,3 @@
+- Integrate <a href="https://github.com/RikkaApps/Sui">Sui</a>
+  Allow one time to grant the required permission/s.
+  Allow all the time to enable or disable the Developer Options screen without going into the Settings app.
