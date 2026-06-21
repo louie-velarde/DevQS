@@ -12,7 +12,7 @@ android {
 
     defaultConfig {
         applicationId = "me.velc.devqs"
-        minSdk = 24
+        minSdk = 26
         versionCode = 3
         versionName = "1.1.1"
     }
@@ -34,4 +34,5 @@ android {
 }
 
 dependencies {
+    implementation(libs.shizuku.api)
 }

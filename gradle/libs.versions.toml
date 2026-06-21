@@ -2,6 +2,8 @@
 agp = "9.2.1"
 
 [libraries]
+#noinspection NewerVersionAvailable
+shizuku-api = { module = "dev.rikka.shizuku:api", version = "13.1.0" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

@@ -1,31 +1,37 @@
 package me.velc.devqs;
 
+import static me.velc.devqs.Utils.execute;
+import static me.velc.devqs.Utils.log;
+
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.app.PendingIntent;
 import android.content.ClipData;
 import android.content.ClipboardManager;
-import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.ContentObserver;
-import android.net.ConnectivityManager;
-import android.net.NetworkCapabilities;
 import android.net.Uri;
 import android.net.nsd.NsdManager;
 import android.net.nsd.NsdServiceInfo;
+import android.os.Build;
 import android.provider.Settings;
 import android.service.quicksettings.Tile;
 import android.service.quicksettings.TileService;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.net.Inet4Address;
 import java.util.Locale;
 import java.util.Objects;
 
-public abstract class BaseDevQsTileService extends TileService {
+import rikka.shizuku.Shizuku;
 
-	private static final String TAG = "DevQS";
+public abstract class BaseDevQsTileService extends TileService
+		implements Shizuku.OnBinderReceivedListener,
+		           Shizuku.OnBinderDeadListener {
 
 	private final String settingName;
 
@@ -33,11 +39,11 @@ public abstract class BaseDevQsTileService extends TileService {
 		this.settingName = settingName;
 	}
 
-	protected boolean isSettingEnabled() {
+	protected final boolean isSettingEnabled() {
 		return "1".equals(Settings.Global.getString(getContentResolver(), settingName));
 	}
 
-	protected boolean hasPermission() {
+	protected final boolean hasPermission() {
 		int result = checkSelfPermission(Manifest.permission.WRITE_SECURE_SETTINGS);
 		return result == PackageManager.PERMISSION_GRANTED;
 	}
@@ -46,14 +52,16 @@ public abstract class BaseDevQsTileService extends TileService {
 		@Override
 		public void onChange(boolean selfChange, Uri uri) {
 			var tile = getQsTile();
-			int state = isLocked()
+			int state = isLocked() // @formatter:off
 					? Tile.STATE_UNAVAILABLE
 					: isSettingEnabled()
 							? Tile.STATE_ACTIVE
-							: Tile.STATE_INACTIVE;
+							: Tile.STATE_INACTIVE; // @formatter:on
 			onUpdateTile(tile, tile.getLabel(), state);
 		}
 	};
+
+	private boolean suiBound;
 
 	@Override
 	public void onStartListening() {
@@ -61,8 +69,30 @@ public abstract class BaseDevQsTileService extends TileService {
 		observer.onChange(true, uri);
 
 		getContentResolver().registerContentObserver(uri, false, observer);
+
+		suiBound = false;
+		Shizuku.addBinderReceivedListenerSticky(this);
+		Shizuku.addBinderDeadListener(this);
 	}
 
+	protected final boolean isSuiBound() {
+		return suiBound;
+	}
+
+	@Override
+	public final void onBinderReceived() {
+		suiBound = true;
+		if (!hasPermission()) {
+			execute("pm", "grant", getPackageName(), Manifest.permission.WRITE_SECURE_SETTINGS);
+		}
+	}
+
+	@Override
+	public final void onBinderDead() {
+		suiBound = false;
+	}
+
+	@SuppressLint("StartActivityAndCollapseDeprecated")
 	@Override
 	public void onClick() {
 		if (hasPermission()) {
@@ -75,6 +105,21 @@ public abstract class BaseDevQsTileService extends TileService {
 				onUpdateTile(tile, tile.getLabel(), Tile.STATE_ACTIVE);
 			} else {
 				showCannotEnableSettingReason();
+			}
+		} else if (suiBound && !Shizuku.shouldShowRequestPermissionRationale()) {
+			var intent = new Intent(this, ShizukuActivity.class);
+			intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+			intent.addFlags(Intent.FLAG_ACTIVITY_TASK_ON_HOME);
+
+			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+				startActivityAndCollapse(PendingIntent.getActivity(
+						this,
+						View.generateViewId(),
+						intent,
+						PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_ONE_SHOT));
+			} else {
+				startActivityAndCollapse(intent);
 			}
 		} else {
 			showPermissionRequestDialog();
@@ -124,13 +169,38 @@ public abstract class BaseDevQsTileService extends TileService {
 
 	@Override
 	public void onStopListening() {
+		Shizuku.removeBinderReceivedListener(this);
+		Shizuku.removeBinderDeadListener(this);
 		getContentResolver().unregisterContentObserver(observer);
 	}
 
 	public static class DeveloperOptions extends BaseDevQsTileService {
 
+		private static final String ALLOWED_ACTIVITY;
+		private static final String BLOCKED_ACTIVITY;
+
+		static {
+			var format = "com.android.settings/.Settings$DevelopmentSettings%sActivity";
+			ALLOWED_ACTIVITY = String.format(Locale.ROOT, format, "Dashboard");
+			BLOCKED_ACTIVITY = String.format(Locale.ROOT, format, "Disabled");
+		}
+
 		public DeveloperOptions() {
 			super(Settings.Global.DEVELOPMENT_SETTINGS_ENABLED);
+		}
+
+		@Override
+		protected void onUpdateTile(Tile tile, CharSequence label, int state) {
+			if (isSuiBound() && tile.getState() != state) {
+				if (state == Tile.STATE_ACTIVE) {
+					execute("pm", "disable", BLOCKED_ACTIVITY);
+					execute("pm", "enable", ALLOWED_ACTIVITY);
+				} else if (state == Tile.STATE_INACTIVE) {
+					execute("pm", "disable", ALLOWED_ACTIVITY);
+					execute("pm", "enable", BLOCKED_ACTIVITY);
+				}
+			}
+			super.onUpdateTile(tile, label, state);
 		}
 	}
 
@@ -195,7 +265,7 @@ public abstract class BaseDevQsTileService extends TileService {
 			int servicePort = serviceInfo.getPort();
 			log("Service Port: %d", servicePort);
 
-			var ipv4Addr = getIpv4Address(this);
+			var ipv4Addr = Utils.getIpv4Address(this);
 			log("IPv4 Address: %s", ipv4Addr);
 
 			if (Objects.equals(serviceAddr, ipv4Addr)) {
@@ -232,7 +302,7 @@ public abstract class BaseDevQsTileService extends TileService {
 
 		@Override
 		protected boolean canEnableSetting() {
-			return isWifiConnected(this);
+			return Utils.isWifiConnected(this);
 		}
 
 		@Override
@@ -254,46 +324,6 @@ public abstract class BaseDevQsTileService extends TileService {
 			} catch (IllegalArgumentException ignored) {
 			}
 			super.onStopListening();
-		}
-
-		private static String getIpv4Address(Context context) {
-			var cm = context.getSystemService(ConnectivityManager.class);
-			if (cm == null) return null;
-
-			for (var network : cm.getAllNetworks()) {
-				var nc = cm.getNetworkCapabilities(network);
-				if (nc == null || !nc.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) continue;
-
-				var lp = cm.getLinkProperties(network);
-				if (lp == null) continue;
-
-				for (var linkAddress : lp.getLinkAddresses()) {
-					var inetAddress = linkAddress.getAddress();
-					if (inetAddress instanceof Inet4Address) {
-						return inetAddress.getHostAddress();
-					}
-				}
-			}
-			return null;
-		}
-
-		private static boolean isWifiConnected(Context context) {
-			var cm = context.getSystemService(ConnectivityManager.class);
-			if (cm == null) return false;
-
-			for (var network : cm.getAllNetworks()) {
-				var nc = cm.getNetworkCapabilities(network);
-				if (nc == null) continue;
-
-				if (nc.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
-					return true;
-				}
-			}
-			return false;
-		}
-
-		private static void log(String format, Object... args) {
-			// Log.d(TAG, String.format(Locale.ROOT, format, args));
 		}
 	}
 }
