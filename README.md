@@ -19,10 +19,13 @@ The app requires the permission WRITE_SECURE_SETTINGS which can be granted using
 
 `adb shell pm grant me.velc.devqs android.permission.WRITE_SECURE_SETTINGS`
 
+Or alternatively, as of 1.2.0, if [Sui](https://github.com/RikkaApps/Sui) is installed,
+allow access to grant the permission.
+
 Also, the tiles are disabled while on the lock screen and can only be toggled after unlocking the device.
 If that is not the case, try allowing auto-start or turning off battery optimizations for the app.
 See [dontkillmyapp.com](https://dontkillmyapp.com) for instructions.
 
 ## Screenshots
 
-<img src="fastlane/metadata/android/en-US/images/phoneScreenshots/1.jpg" width=49% /> <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/2.jpg" width=49% />
+<img src="fastlane/metadata/android/en-US/images/phoneScreenshots/1.jpg" width=33% /> <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/2.jpg" width=33% /> <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/3.jpg" width=33% />
