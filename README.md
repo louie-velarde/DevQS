@@ -28,4 +28,4 @@ See [dontkillmyapp.com](https://dontkillmyapp.com) for instructions.
 
 ## Screenshots
 
-<img src="fastlane/metadata/android/en-US/images/phoneScreenshots/1.jpg" width=33% /> <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/2.jpg" width=33% /> <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/3.jpg" width=33% />
+<img src="fastlane/metadata/android/en-US/images/phoneScreenshots/1.jpg" width=32% /> <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/2.jpg" width=32% /> <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/3.jpg" width=32% />
